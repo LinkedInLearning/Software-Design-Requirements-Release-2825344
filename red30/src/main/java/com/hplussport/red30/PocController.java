@@ -1,4 +1,4 @@
-package com.hplussport.red30.search;
+package com.hplussport.red30;
 
 import java.io.IOException;
 
@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-@WebServlet (urlPatterns = "/search")
-public class SearchController extends HttpServlet {
+@WebServlet (urlPatterns = "/poc")
+public class PocController extends HttpServlet {
 	       
-    public SearchController() {
+    public PocController() {
         super();
     }
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsp/search/searchInputs.jsp");
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsp/poc/pocResults.jsp");
 		rd.forward(request, response);
 	}
 

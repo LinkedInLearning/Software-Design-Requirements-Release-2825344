@@ -38,8 +38,6 @@ public class Dao {
 			e.printStackTrace();
 		}
 	}
-
-	private Dao(String dummy) {}
 	
 	//singleton pattern
 	public static Dao getInstance() {
