@@ -11,7 +11,7 @@
 	<jsp:include page="/jsp/header.jsp"></jsp:include>
 
 	<h2>
-		Wow! I found
+		Found
 		<%=Dao.productMap.size()%>
 		products in database
 
