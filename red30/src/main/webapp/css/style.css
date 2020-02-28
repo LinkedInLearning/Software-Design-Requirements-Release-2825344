@@ -1,0 +1,121 @@
+#menu ul {
+	list-style: none;
+}
+#menu li {
+	display: inline;
+}
+
+ul {
+	list-style-type: none;
+	border-radius: 5px;
+}
+
+ul li a {
+	color: #6B8E23;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+table.elements, .elements td, .elements th {
+	cell-spacing: 0px;
+	text-align: left;
+	height:30px;
+}
+
+tr.elements:nth-child(even) {
+	background: #DCDCDC;
+}
+
+th.elements {
+	color: white;
+	background: #6B8E23; 
+	align: center;
+	height: 30px;
+}
+
+<!-- #FFA500 -->
+
+div.elements {
+	border: 1px solid #DCDCDC;
+	width: 94%;
+	height: 50%;
+	margin-left: 3%;
+	margin-right: 3%;
+	overflow: scroll;
+}
+
+table.elements {
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 94%;
+	margin-left: 3%;
+	margin-right: 3%;
+	height: 100%;
+	text-align: left;
+	overflow: scroll;
+}
+
+table.small {
+	border-collapse: collapse;
+	width: 94%;
+	margin-left: 3%;
+	margin-right: 3%;
+	height: 100%;
+	text-align: left;
+	overflow: scroll;
+}
+
+div.buttons {
+	width: 100%;
+	margin: 0 auto;
+}
+
+div.quarterPage {
+	width: 96%;
+	margin-left: 2%;
+	margin-right: 2%;
+	height: 80%;
+	overflow: scroll;
+}
+
+div.halfPage {
+	width: 96%;
+	margin-left: 2%;
+	margin-right: 2%;
+	height: 40%; margin 0 auto;
+	overflow: scroll;
+}
+
+table.fullPage {
+	table-layout: fixed;
+	width: 100%;
+	border-collapse: collapse;
+	height: 80%;
+	border-collapse: collapse;
+}
+
+td.fullPage {
+	width: 50%;
+}
+tr.lastrow {
+	height: auto;
+}
+
+h4.message {
+	font-size: 20px;
+	align: center;
+	color: #6B8E23;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+table, td, th, ul, p, h4, h3 {
+	font-family: "Trebutchet MS", Helvetica, Tahoma, sans-serif;
+	font-size: 15px;
+}
+
+h2 {
+	font-family: "Trebutchet MS", Helvetica, Tahoma, sans-serif;
+	color: #6B8E23;
+}
+
