@@ -14,10 +14,5 @@
 		<%=Dao.productMap.size()%>
 		products in database
 	</h2>
-	<h2>
-		I also found
-		<%=Dao.nutrientMap.size()%>
-		nutrients in database
-	</h2>
 </body>
 </html>
