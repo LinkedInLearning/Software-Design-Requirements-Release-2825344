@@ -14,7 +14,7 @@
 					<div id="menu">
 						<ul>
 							<li><a href="index.jsp">home</a></li>
-							<li><a href=poc>poc</a></li>
+						<!-- <li><a href=poc>poc</a></li> -->
 							<li><a href=search>search products</a></li>
 							<li><a href=compare>compare products</a></li>
 							<li><a href=login>login</a></li>
