@@ -1,6 +1,8 @@
 package com.hplussport.red30;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import javax.sql.DataSource;
 
 import com.hplussport.red30.beans.Nutrient;
 import com.hplussport.red30.beans.Product;
+import com.hplussport.red30.beans.User;
 
 /**Dao is Red30's Data Access Object class to connect with
  * Red30DB through the data source defined in tomcat's context.xml.
@@ -68,5 +71,23 @@ public class Dao {
 			nutrientsList.add(nutrientMap.get(nutrientId));
 		}
 		return nutrientsList;
+	}
+	
+	//validates user credentials from user table in red30db
+	public User validateUser(String username, String password) {
+		User user = null;
+		try {
+			PreparedStatement ps = connection.prepareStatement("select username, password from user "
+					+ "where username = ? and password = ?");
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				user = new User(rs.getString(1), rs.getString(2));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 }
