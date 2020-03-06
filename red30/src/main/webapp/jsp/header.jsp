@@ -16,7 +16,7 @@
 				<td align="right" valign="bottom">
 					<div id="menu">
 						<ul>
-							<li><a href="/index.jsp">home</a></li>
+							<li><a href="index.jsp">home</a></li>
 							<li><a href=search>search products</a></li>
 							<li><a href=compare>compare products</a></li>
 							<li><a href=login>login</a></li>
@@ -39,12 +39,12 @@
 				<td align="right" valign="bottom">
 					<div id="menu">
 						<ul>				
-						<li ><a href="/index.jsp">home</a></li>
+						<li ><a href="index.jsp">home</a></li>
 								<li><a href=search>search products</a></li>
 								<li><a href=compare>compare products</a></li>
 								<li><a href=recordmeal>record meal</a></li>
 								<li><a href=dietlog>view diet log</a></li>
-								<li><a href=tracknutrition>track nutrition</a></li>
+								<li><a href=track>track nutrition</a></li>
 								<li><a href=logout>logout <%=user.getUsername()%></a>
 						</ul>
 					</div>
