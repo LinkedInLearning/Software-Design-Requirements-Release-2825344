@@ -1,6 +1,5 @@
-package com.hplussport.red30;
+package com.hplussport.red30.datalayer;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,95 +13,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
-
 import com.hplussport.red30.beans.Meal;
-import com.hplussport.red30.beans.Nutrient;
-import com.hplussport.red30.beans.Product;
 import com.hplussport.red30.beans.Serving;
-import com.hplussport.red30.beans.User;
 
-/**Dao is Red30's Data Access Object class to connect with
- * Red30DB through the data source defined in tomcat's context.xml.
- * It uses Singleton pattern to ensure single instance. 
+/** MealDao handles all db queries related to meal and servings data
+ * created by user
  */
-public class Dao {
-	private static Dao dao;
-	Connection connection;
+public class MealDao {
 
-	public static Map<String, Product> productMap = new HashMap<>();  //populated by DataLoader
-	public static Map<String, Nutrient> nutrientMap = new HashMap<>();  //populated by DataLoader
-	
-	//connect to data source as defined in context.xml
-	private Dao() {
-		InitialContext ic;
-		try {
-			ic = new InitialContext();
-			Context xmlContext = (Context) ic.lookup("java:comp/env");
-			DataSource datasource = (DataSource) xmlContext.lookup("datasource"); //defined in context.xml
-			connection = datasource.getConnection();
-		} catch (NamingException | SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	//singleton pattern
-	public static Dao getInstance() {
-		if (dao == null) {
-			dao = new Dao();
-		}
-		return dao;
-	}
-	
-	//returns a list of product objects whose description
-	//contains the searchString
-	public static List<Product> searchProductOnName(String searchString) {
-		List<Product> products = new ArrayList<>();
-		for (Map.Entry<String, Product> entry : productMap.entrySet()) {
-			if (entry.getValue().getDescription().toLowerCase().contains(searchString.toLowerCase())) {
-				products.add(entry.getValue());
-			}
-		}
-		return products;
-	}
-
-	//returns a list of Nutrient objects for a given 
-	//product fdc_id
-	public static List<Nutrient> searchNutrientsForProduct(String fdc_id) {
-		List<Nutrient> nutrientsList = new ArrayList<>();
-		Product product = productMap.get(fdc_id);
-		for (String nutrientId: product.getProductNutrientMap().keySet()) {
-			nutrientsList.add(nutrientMap.get(nutrientId));
-		}
-		return nutrientsList;
-	}
-	
-	//validates user credentials from user table in red30db
-	public User validateUser(String username, String password) {
-		User user = null;
-		try {
-			PreparedStatement ps = connection.prepareStatement("select username, password from user "
-					+ "where username = ? and password = ?");
-			ps.setString(1, username);
-			ps.setString(2, password);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				user = new User(rs.getString(1), rs.getString(2));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return user;
-	}
-	
 	//saves meal and its servings in red30 db in meal and serving tables
-	public boolean saveMeal(Meal meal) {
+	public static boolean saveMeal(Meal meal) {
 		try {
-			PreparedStatement ps = connection.prepareStatement("insert into meal (mealDateTime, mealType, username) values (?, ?, ?)", 
+			PreparedStatement ps = Dao.getInstance().connection.prepareStatement("insert into meal (mealDateTime, mealType, username) values (?, ?, ?)", 
 					Statement.RETURN_GENERATED_KEYS);
 			ps.setTimestamp(1, meal.getMealDateTime());
 			ps.setString(2, meal.getMealType());
@@ -112,7 +34,7 @@ public class Dao {
 			result.next();
 			meal.setMealId(result.getInt(1));
 			for (Serving serving: meal.getMealServingList()) {
-				ps = connection.prepareStatement("insert into serving (mealId, fdc_id, quantity) values (?, ?, ?)");
+				ps = Dao.getInstance().connection.prepareStatement("insert into serving (mealId, fdc_id, quantity) values (?, ?, ?)");
 				ps.setInt(1,  meal.getMealId());
 				ps.setString(2, serving.getProduct().getFdc_id());
 				ps.setFloat(3, serving.getQuantity());
@@ -126,7 +48,7 @@ public class Dao {
 	}
 
 	//finds meals for a user within a given date range fromDate to toDate
-	public List<Meal> findMeals(String username, String fromDate, String toDate) {
+	public static List<Meal> findMeals(String username, String fromDate, String toDate) {
 		List<Meal> result = new ArrayList<>();
 		try {
 			Timestamp fromDateTime, toDateTime;
@@ -140,8 +62,8 @@ public class Dao {
 			} else {
 				toDateTime = Timestamp.valueOf(toDate + " 00:00:00.00");
 			}
-			
-			PreparedStatement ps = connection.prepareStatement("select * from meal where username = ? and CAST(mealDateTime AS DATE) between ? and ? "
+
+			PreparedStatement ps = Dao.getInstance().connection.prepareStatement("select * from meal where username = ? and CAST(mealDateTime AS DATE) between ? and ? "
 					+ "order by mealDateTime");
 			ps.setString(1, username);
 			ps.setTimestamp(2, fromDateTime);
@@ -154,13 +76,13 @@ public class Dao {
 				meal.setMealType(mealResult.getString(3));
 				String mealId = mealResult.getString(1);
 				meal.setMealId(Integer.parseInt(mealId));
-				ps = connection.prepareStatement("select * from serving where mealId = ?");
+				ps = Dao.getInstance().connection.prepareStatement("select * from serving where mealId = ?");
 				ps.setString(1, mealId);
 				ResultSet servingResult = ps.executeQuery();
 				List<Serving> servings = new ArrayList<>();
 				while (servingResult.next()) {
 					//create serving with product and quantity and add to list
-					servings.add(new Serving( Dao.productMap.get(servingResult.getString(3)), servingResult.getFloat(4)));
+					servings.add(new Serving( USDADao.productMap.get(servingResult.getString(3)), servingResult.getFloat(4)));
 				}
 				meal.setMealServingList(servings);
 				result.add(meal);
@@ -171,8 +93,8 @@ public class Dao {
 		}
 		return result;
 	}
-	
-	public Map<Calendar, Map<String, Float>> findDailyNutrients(List<Meal> meals, String nutrientId, String username, String fromDate, String toDate) {
+
+	public static Map<Calendar, Map<String, Float>> findDailyNutrients(List<Meal> meals, String nutrientId, String username, String fromDate, String toDate) {
 
 		Map<Calendar, Map<String, Float>> dailyNutrientMap = new TreeMap<>();
 
@@ -194,8 +116,8 @@ public class Dao {
 
 			for (Serving serving: meal.getMealServingList()) {
 				String fdc_id = serving.getProduct().getFdc_id();
-				if (Dao.productMap.get(fdc_id).getProductNutrientMap().containsKey(nutrientId)) {
-					float amount = Dao.productMap.get(fdc_id).getProductNutrientMap().get(nutrientId);
+				if (USDADao.productMap.get(fdc_id).getProductNutrientMap().containsKey(nutrientId)) {
+					float amount = USDADao.productMap.get(fdc_id).getProductNutrientMap().get(nutrientId);
 					//populate dailyNutrientMap
 					//check if date already added. Add if it is not.
 					if (!dailyNutrientMap.containsKey(cal)) {

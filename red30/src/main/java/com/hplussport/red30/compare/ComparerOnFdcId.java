@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hplussport.red30.Dao;
 import com.hplussport.red30.beans.Nutrient;
 import com.hplussport.red30.beans.Product;
+import com.hplussport.red30.datalayer.USDADao;
 
 @SuppressWarnings("serial")
 @WebServlet (urlPatterns = "/comparefdcid")
@@ -31,20 +31,20 @@ public class ComparerOnFdcId extends HttpServlet {
 
 		if (fdcId1 != null) {
 			//pull single product
-			Product product1 = Dao.productMap.get(fdcId1);
+			Product product1 = USDADao.productMap.get(fdcId1);
 			session.setAttribute("selectedProduct1", product1);
 			//search its nutrients
-			nutrients1 = Dao.searchNutrientsForProduct(fdcId1);
+			nutrients1 = USDADao.searchNutrientsForProduct(fdcId1);
 			//set attributes
 			session.setAttribute("nutrientsList1", nutrients1);	
 		}
 
 		if (fdcId2 != null) {
 			//pull single product
-			Product product2 = Dao.productMap.get(fdcId2);
+			Product product2 = USDADao.productMap.get(fdcId2);
 			session.setAttribute("selectedProduct2", product2);
 			//search its nutrients
-			nutrients2 = Dao.searchNutrientsForProduct(fdcId2);
+			nutrients2 = USDADao.searchNutrientsForProduct(fdcId2);
 			//set attributes
 			session.setAttribute("nutrientsList2", nutrients2);	
 

@@ -44,7 +44,7 @@
 								<li><a href=compare>compare products</a></li>
 								<li><a href=recordmeal>record meal</a></li>
 								<li><a href=dietlog>view diet log</a></li>
-								<li><a href=track>track nutrition</a></li>
+								<li><a href=tracknutrition>track nutrition</a></li>
 								<li><a href=logout>logout <%=user.getUsername()%></a>
 						</ul>
 					</div>

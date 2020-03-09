@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hplussport.red30.Dao;
 import com.hplussport.red30.beans.Meal;
 import com.hplussport.red30.beans.Product;
 import com.hplussport.red30.beans.Serving;
+import com.hplussport.red30.datalayer.USDADao;
 
 @SuppressWarnings("serial")
 @WebServlet (urlPatterns = "/addServingToMeal")
@@ -25,7 +25,7 @@ public class ServingAdder extends HttpServlet{
 		String qty = (String)request.getParameter("productQuantity");
 		float productQuantity = Float.parseFloat((qty==null || qty.isEmpty() ? "0": qty));
 
-		Product product = Dao.productMap.get(fdcId);
+		Product product = USDADao.productMap.get(fdcId);
 		session.setAttribute("selectedProduct", product);
 		if (productQuantity > 0) {  //user has entered some quantity
 			Serving serving = new Serving(product, productQuantity);

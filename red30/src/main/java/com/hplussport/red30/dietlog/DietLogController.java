@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hplussport.red30.Dao;
 import com.hplussport.red30.beans.Meal;
 import com.hplussport.red30.beans.User;
+import com.hplussport.red30.datalayer.MealDao;
 
 
 @SuppressWarnings("serial")
@@ -27,7 +27,7 @@ public class DietLogController extends HttpServlet {
 		String fromDate = (String)request.getParameter("fromDate");
 		String toDate = (String)request.getParameter("toDate");
 		if (user != null) {
-			List<Meal> meals = Dao.getInstance().findMeals(user.getUsername(), fromDate, toDate);
+			List<Meal> meals = MealDao.findMeals(user.getUsername(), fromDate, toDate);
 			session.setAttribute("meals", meals);
 			session.setAttribute("fromDate", fromDate);
 			session.setAttribute("toDate", toDate);

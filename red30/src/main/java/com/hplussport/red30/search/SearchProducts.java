@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hplussport.red30.Dao;
 import com.hplussport.red30.beans.Nutrient;
 import com.hplussport.red30.beans.Product;
+import com.hplussport.red30.datalayer.USDADao;
 
 
 @SuppressWarnings("serial")
@@ -30,12 +30,12 @@ public class SearchProducts extends HttpServlet {
 		session.setAttribute("searchString", searchString);
 		
 		//ask Dao to search for products
-		List<Product> productsList = Dao.searchProductOnName(searchString);
+		List<Product> productsList = USDADao.searchProductOnName(searchString);
 
 		//get nutrients for first product in the productsList
 		List<Nutrient> nutrientsList = null;
 		if (productsList != null && productsList.size() > 0) {
-			nutrientsList = Dao.searchNutrientsForProduct(productsList.get(0).getFdc_id());
+			nutrientsList = USDADao.searchNutrientsForProduct(productsList.get(0).getFdc_id());
 			session.setAttribute("productsList", productsList);	
 			session.setAttribute("nutrientsList", nutrientsList);
 			session.setAttribute("selectedProduct", productsList.get(0));  //this to select the radio button

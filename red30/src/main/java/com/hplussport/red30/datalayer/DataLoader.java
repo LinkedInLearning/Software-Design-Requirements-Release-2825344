@@ -1,4 +1,4 @@
-package com.hplussport.red30;
+package com.hplussport.red30.datalayer;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,10 +40,10 @@ public class DataLoader extends HttpServlet{
 
 	@Override
 	public void destroy()  {
-		Dao.nutrientMap = null;
-		Dao.productMap = null;
+		USDADao.nutrientMap = null;
+		USDADao.productMap = null;
 		try {
-			if (dao.connection != null)
+			if (Dao.getInstance().connection != null)
 				dao.connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -62,7 +62,7 @@ public class DataLoader extends HttpServlet{
 			ResultSet rs = dao.connection.prepareStatement(query).executeQuery();
 			while (rs.next()) {
 				Product product = new Product(rs.getString(1), rs.getString(2));
-				Dao.productMap.put(rs.getString(1), product);
+				USDADao.productMap.put(rs.getString(1), product);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,13 +73,13 @@ public class DataLoader extends HttpServlet{
 		try {
 			ResultSet rs = dao.connection.prepareStatement(query).executeQuery();
 			while (rs.next()) {
-				if (Dao.productMap.containsKey(rs.getString(1))) {
-					Product product = Dao.productMap.get(rs.getString(1));
+				if (USDADao.productMap.containsKey(rs.getString(1))) {
+					Product product = USDADao.productMap.get(rs.getString(1));
 					product.setServing_size_unit(rs.getString(2));
 					product.setServing_size(rs.getFloat(3));
 					product.setHousehold_serving_fulltext(rs.getString(4));
 					product.setBrand_owner(rs.getString(5));
-					Dao.productMap.put(rs.getString(1), product);
+					USDADao.productMap.put(rs.getString(1), product);
 				}
 			}
 		} catch (SQLException e) {
@@ -99,7 +99,7 @@ public class DataLoader extends HttpServlet{
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Nutrient nutrient = new  Nutrient(rs.getString(1), rs.getString(2), rs.getString(3));
-				Dao.nutrientMap.put(rs.getString(1), nutrient);
+				USDADao.nutrientMap.put(rs.getString(1), nutrient);
 			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -140,8 +140,8 @@ public class DataLoader extends HttpServlet{
 		//use data in each item in itemList to update 
 		//the productNutrientMap for each product in productMap 
 		for (TempItem item : itemList) {
-			if (Dao.productMap.containsKey(Integer.toString(item.fdc_id))) {
-				Product product = Dao.productMap.get(Integer.toString(item.fdc_id));
+			if (USDADao.productMap.containsKey(Integer.toString(item.fdc_id))) {
+				Product product = USDADao.productMap.get(Integer.toString(item.fdc_id));
 				if (product.getProductNutrientMap() == null) {
 					product.setProductNutrientMap();
 				}

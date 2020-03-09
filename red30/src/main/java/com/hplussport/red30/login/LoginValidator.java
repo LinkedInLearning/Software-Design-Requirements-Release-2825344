@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hplussport.red30.Dao;
 import com.hplussport.red30.beans.User;
+import com.hplussport.red30.datalayer.UserDao;
 
 @SuppressWarnings("serial")
 @WebServlet (urlPatterns = "/validate")
@@ -27,7 +27,7 @@ public class LoginValidator extends HttpServlet {
 		String username = (String) request.getParameter("username");
 		String password = (String) request.getParameter("password");
 		
-		User user = Dao.getInstance().validateUser(username, password);
+		User user = UserDao.validateUser(username, password);
 		session.setAttribute("user", user);
 		RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsp/login/loginResponse.jsp");
 		rd.forward(request, response);

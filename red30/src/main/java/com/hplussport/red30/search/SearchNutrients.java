@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hplussport.red30.Dao;
 import com.hplussport.red30.beans.Nutrient;
 import com.hplussport.red30.beans.Product;
+import com.hplussport.red30.datalayer.USDADao;
 
 
 @SuppressWarnings("serial")
@@ -30,9 +30,9 @@ public class SearchNutrients extends HttpServlet {
 		String fdcId = (String)request.getParameter("fdcId");
 		if (fdcId != null) {
 			//find the product
-			Product product = Dao.productMap.get(fdcId);
+			Product product = USDADao.productMap.get(fdcId);
 			//search its nutrients
-			nutrients = Dao.searchNutrientsForProduct(fdcId);
+			nutrients = USDADao.searchNutrientsForProduct(fdcId);
 			//set attributes
 			session.setAttribute("selectedProduct", product);
 			session.setAttribute("nutrientsList", nutrients);	

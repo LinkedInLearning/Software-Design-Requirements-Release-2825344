@@ -1,7 +1,7 @@
 package com.hplussport.red30.beans;
 
 /* Bean with getters and setters as needed*/
-public class Nutrient {
+public class Nutrient implements Comparable<Nutrient>{
 	
 	private String id;
 	private String name;
@@ -32,4 +32,9 @@ public class Nutrient {
 	public void setUnit_name(String unit_name) {
 		this.unit_name = unit_name;
 	}
+	@Override
+	public int compareTo(Nutrient o) {
+		return name.compareTo(o.name);
+	}
+
 }

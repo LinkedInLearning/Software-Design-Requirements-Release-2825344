@@ -13,14 +13,16 @@ import org.junit.Test;
 
 import com.hplussport.red30.beans.Nutrient;
 import com.hplussport.red30.beans.Product;
+import com.hplussport.red30.datalayer.Dao;
+import com.hplussport.red30.datalayer.USDADao;
 
 public class TestDao {
 	
 	@BeforeClass 
 	public static void setupClass(){
 		//setup fake product and nutrient maps
-		Dao.productMap = new HashMap<String, Product>();
-		Dao.nutrientMap = new HashMap<String, Nutrient>();
+		USDADao.productMap = new HashMap<String, Product>();
+		USDADao.nutrientMap = new HashMap<String, Nutrient>();
 		
 		//create fake products
 		Product product1 = new Product("123", "Apple pie");
@@ -28,38 +30,38 @@ public class TestDao {
 		Product product3 = new Product("345", "Apple sauce");
 		
 		//add products to map
-		Dao.productMap.put("123", product1);
-		Dao.productMap.put("234", product2);
-		Dao.productMap.put("345", product3);
+		USDADao.productMap.put("123", product1);
+		USDADao.productMap.put("234", product2);
+		USDADao.productMap.put("345", product3);
 		
 		//initialize productNutrientMap in each product to empty maps
-		for (Map.Entry<String, Product> entry: Dao.productMap.entrySet()) {
+		for (Map.Entry<String, Product> entry: USDADao.productMap.entrySet()) {
 			entry.getValue().setProductNutrientMap();   
 		}
 		
 		//create fake nutrientMap with fake nutrients
-		Dao.nutrientMap.put("11", new Nutrient("11", "Calcium", "mg"));
-		Dao.nutrientMap.put("22", new Nutrient("22", "Protein", "gm"));
-		Dao.nutrientMap.put("33", new Nutrient("33", "Energy", "KCAL"));
-		Dao.nutrientMap.put("44", new Nutrient("44", "Fiber", "gm"));
+		USDADao.nutrientMap.put("11", new Nutrient("11", "Calcium", "mg"));
+		USDADao.nutrientMap.put("22", new Nutrient("22", "Protein", "gm"));
+		USDADao.nutrientMap.put("33", new Nutrient("33", "Energy", "KCAL"));
+		USDADao.nutrientMap.put("44", new Nutrient("44", "Fiber", "gm"));
 		
 		//put nutrients in product - Apple pie
-		Dao.productMap.get("123").getProductNutrientMap().put("11", 3.5f);
-		Dao.productMap.get("123").getProductNutrientMap().put("22", 20f);
-		Dao.productMap.get("123").getProductNutrientMap().put("33", 100f);
+		USDADao.productMap.get("123").getProductNutrientMap().put("11", 3.5f);
+		USDADao.productMap.get("123").getProductNutrientMap().put("22", 20f);
+		USDADao.productMap.get("123").getProductNutrientMap().put("33", 100f);
 		
 	}
 	
 	//test that search returns correct number of products
 	@Test
 	public void testCountOfProductOnSearchOnName() {
-		assertEquals(2, Dao.searchProductOnName("apple").size());
+		assertEquals(2, USDADao.searchProductOnName("apple").size());
 	}
 	
 	//test that search returns correct products
 	@Test
 	public void testNameOfProductOnSearchOnName() {
-		List<Product> productList =  Dao.searchProductOnName("apple");
+		List<Product> productList =  USDADao.searchProductOnName("apple");
 		Map<String, String> tempMap = new HashMap<>();
 		for (Product product : productList) {
 			tempMap.put(product.getFdc_id(), product.getDescription());
@@ -72,13 +74,13 @@ public class TestDao {
 	//test that search on a products' nutrients returns correct number of nutrients
 	@Test
 	public void testCountOfNutrientInNutrientSearch() {
-		assertEquals(3, Dao.searchNutrientsForProduct("123").size());
+		assertEquals(3, USDADao.searchNutrientsForProduct("123").size());
 	}
 	
 	//test that search on a products' nutrients returns correct nutrient objects
 	@Test
 	public void testNutrientIdInNutrientSearch() {
-		List<Nutrient> nutrientsList =  Dao.searchNutrientsForProduct("123");
+		List<Nutrient> nutrientsList =  USDADao.searchNutrientsForProduct("123");
 		Map<String, String> tempMap = new HashMap<>();
 		for (Nutrient nutrient : nutrientsList) {
 			tempMap.put(nutrient.getId(), nutrient.getName());
@@ -91,7 +93,7 @@ public class TestDao {
 	
 	@AfterClass
 	public static void tearDownClass() {
-		Dao.productMap = null;
-		Dao.nutrientMap = null;
+		USDADao.productMap = null;
+		USDADao.nutrientMap = null;
 	}
 }

@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hplussport.red30.Dao;
 import com.hplussport.red30.beans.Nutrient;
 import com.hplussport.red30.beans.Product;
+import com.hplussport.red30.datalayer.USDADao;
 
 @SuppressWarnings("serial")
 @WebServlet (urlPatterns = "/comparename")
@@ -33,20 +33,20 @@ public class ComparerOnProductName extends HttpServlet {
 		List<Product> productsList1 = new ArrayList<>();
 		if (searchString1 != null && !searchString1.isEmpty())  {
 			session.setAttribute("searchString1", searchString1);
-			productsList1 = Dao.searchProductOnName(searchString1);
+			productsList1 = USDADao.searchProductOnName(searchString1);
 		}
 		
 		//get product list for searchString2
 		List<Product> productsList2 = new ArrayList<>();
 		if (searchString2 != null && !searchString2.isEmpty()) {
 			session.setAttribute("searchString2", searchString2);
-			productsList2 = Dao.searchProductOnName(searchString2);
+			productsList2 = USDADao.searchProductOnName(searchString2);
 		}
 
 		//get nutrients for first product in productList1 as selectedProduct1
 		List<Nutrient> nutrientsList1 = null;
 		if (productsList1 != null && productsList1.size() > 0) {
-			nutrientsList1 = Dao.searchNutrientsForProduct(productsList1.get(0).getFdc_id());
+			nutrientsList1 = USDADao.searchNutrientsForProduct(productsList1.get(0).getFdc_id());
 			session.setAttribute("productsList1", productsList1);	
 			session.setAttribute("nutrientsList1", nutrientsList1);
 			session.setAttribute("selectedProduct1", productsList1.get(0));  //to select the radio button
@@ -55,7 +55,7 @@ public class ComparerOnProductName extends HttpServlet {
 		//get nutrients for first product in productList2 as selectedProduct2
 		List<Nutrient> nutrientsList2 = null;
 		if (productsList2 != null && productsList2.size() > 0) {
-			nutrientsList2 = Dao.searchNutrientsForProduct(productsList2.get(0).getFdc_id());
+			nutrientsList2 = USDADao.searchNutrientsForProduct(productsList2.get(0).getFdc_id());
 			session.setAttribute("productsList2", productsList2);	
 			session.setAttribute("nutrientsList2", nutrientsList2);
 			session.setAttribute("selectedProduct2", productsList2.get(0));  //to select the radio button
